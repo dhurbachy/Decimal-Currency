@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",                 // fine for modern JS
+    "module": "ESNext",                 // needed for native ESM (Vite / browser)
+    "rootDir": "src",                   // source folder
+    "outDir": "dist",                   // build output
+    "declaration": true,                // generate .d.ts files
+    "declarationMap": true,             // optional: source maps for types
+    "strict": true,                      // enable strict TS checks
+    "esModuleInterop": true,            // allows default import interop
+    "moduleResolution": "node",         // resolves packages like Node
+    "isolatedModules": true,            // ensures each file is a module
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,               // ⚡ important to avoid conflicts with @types/node
+    "lib": ["ESNext", "DOM"]            // include DOM types for browser projects
+  },
+  "include": ["src"]
+}
