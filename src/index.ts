@@ -94,6 +94,10 @@ export class DecimalCurrency {
         return this.lessThan(0);
     }
 
+    isZero(): boolean {
+        return this.equals(0);
+    }
+
 
     toString(): string {
         return this.value;
