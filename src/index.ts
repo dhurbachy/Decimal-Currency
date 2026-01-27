@@ -72,10 +72,14 @@ export class DecimalCurrency {
     }
 
     lessThan(n: Num): boolean {
-    const value = n instanceof DecimalCurrency ? n.value : n.toString();
-    const { n1, n2 } = this.normalize(this.value, value);
-    return n1 < n2;
-  }
+        const value = n instanceof DecimalCurrency ? n.value : n.toString();
+        const { n1, n2 } = this.normalize(this.value, value);
+        return n1 < n2;
+    }
+
+    greaterThanOrEqual(n: Num): boolean {
+        return this.greaterThan(n) || this.equals(n);
+    }
 
 
     toString(): string {
