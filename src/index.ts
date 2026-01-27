@@ -47,6 +47,17 @@ export class DecimalCurrency {
     return new DecimalCurrency(result.toFixed(p), p);
   }
 
+   divide(n: Num, precision?: number): DecimalCurrency {
+    const p = precision ?? this.precision;
+    const d1 = this.getDecimalPlaces(this.value);
+    const d2 = this.getDecimalPlaces(n.toString());
+    const n1 = Number(this.value.replace(".", ""));
+    const n2 = Number(n.toString().replace(".", ""));
+    const factor = Math.pow(10, d2 - d1);
+    const result = (n1 / n2) * factor;
+    return new DecimalCurrency(result.toFixed(p), p);
+  }
+
    toString(): string {
     return this.value;
   }
