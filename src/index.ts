@@ -81,9 +81,14 @@ export class DecimalCurrency {
         return this.greaterThan(n) || this.equals(n);
     }
 
-     lessThanOrEqual(n: Num): boolean {
-    return this.lessThan(n) || this.equals(n);
-  }
+    lessThanOrEqual(n: Num): boolean {
+        return this.lessThan(n) || this.equals(n);
+    }
+
+    // ===== Sign-based methods =====
+    isPositive(): boolean {
+        return this.greaterThan(0);
+    }
 
 
     toString(): string {
