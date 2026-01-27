@@ -90,6 +90,10 @@ export class DecimalCurrency {
         return this.greaterThan(0);
     }
 
+    isNegative(): boolean {
+        return this.lessThan(0);
+    }
+
 
     toString(): string {
         return this.value;
