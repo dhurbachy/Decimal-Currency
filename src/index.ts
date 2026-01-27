@@ -30,6 +30,13 @@ export class DecimalCurrency {
     return new DecimalCurrency(result.toFixed(p), p);
   }
 
+  subtract(n: Num, precision?: number): DecimalCurrency {
+    const p = precision ?? this.precision;
+    const { n1, n2, factor } = this.normalize(this.value, n.toString());
+    const result = (n1 - n2) / factor;
+    return new DecimalCurrency(result.toFixed(p), p);
+  }
+
    toString(): string {
     return this.value;
   }
