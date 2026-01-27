@@ -58,6 +58,14 @@ export class DecimalCurrency {
     return new DecimalCurrency(result.toFixed(p), p);
   }
 
+    // ===== Comparison Methods =====
+  equals(n: Num): boolean {
+    const value = n instanceof DecimalCurrency ? n.value : n.toString();
+    const { n1, n2 } = this.normalize(this.value, value);
+    return n1 === n2;
+  }
+
+
    toString(): string {
     return this.value;
   }
