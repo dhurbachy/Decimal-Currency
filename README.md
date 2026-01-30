@@ -79,77 +79,7 @@ const total = calculateTotal(price, quantity, taxRate);
 console.log(total.toString()); // "65.18" (precise calculation)
 ```
 
-### Financial Applications
 
-#### Invoice Calculation
-```javascript
-class InvoiceCalculator {
-  constructor(items, taxRate, discount = 0) {
-    this.items = items.map(item => ({
-      price: new DecimalCurrency(item.price),
-      quantity: new DecimalCurrency(item.quantity)
-    }));
-    this.taxRate = new DecimalCurrency(taxRate);
-    this.discount = new DecimalCurrency(discount);
-  }
-  
-  calculateSubtotal() {
-    return this.items.reduce((total, item) => 
-      total.add(item.price.multiply(item.quantity)), 
-      new DecimalCurrency('0')
-    );
-  }
-  
-  calculateTotal() {
-    const subtotal = this.calculateSubtotal();
-    const discountAmount = subtotal.multiply(this.discount.divide('100'));
-    const afterDiscount = subtotal.subtract(discountAmount);
-    const tax = afterDiscount.multiply(this.taxRate);
-    return afterDiscount.add(tax);
-  }
-}
-
-// Example usage
-const invoice = new InvoiceCalculator([
-  { price: '29.99', quantity: '2' },
-  { price: '9.95', quantity: '5' }
-], '0.10', '5'); // 10% tax, 5% discount
-
-console.log(invoice.calculateSubtotal().toString()); // "104.93"
-console.log(invoice.calculateTotal().toString());    // "109.77" (precise)
-```
-
-#### Currency Conversion
-```javascript
-class CurrencyConverter {
-  constructor(exchangeRates) {
-    this.rates = Object.entries(exchangeRates).reduce((acc, [currency, rate]) => {
-      acc[currency] = new DecimalCurrency(rate);
-      return acc;
-    }, {});
-  }
-  
-  convert(amount, fromCurrency, toCurrency) {
-    const amountDC = new DecimalCurrency(amount);
-    if (fromCurrency === toCurrency) return amountDC;
-    
-    // Convert to USD first, then to target currency
-    const usdAmount = amountDC.divide(this.rates[fromCurrency].toString());
-    return usdAmount.multiply(this.rates[toCurrency].toString());
-  }
-}
-
-const converter = new CurrencyConverter({
-  USD: '1.0',
-  EUR: '0.85',
-  JPY: '110.50',
-  GBP: '0.73'
-});
-
-const amount = new DecimalCurrency('100');
-const converted = converter.convert('100', 'EUR', 'JPY');
-console.log(converted.toString()); // "13000.00" (precise conversion)
-```
 
 ### Comparison Operations
 
@@ -187,13 +117,6 @@ console.log(lowPrecision.toString()); // "0.33"
 
 const highPrecision = new DecimalCurrency('1').divide('3', 20);
 console.log(highPrecision.toString()); // "0.33333333333333333333"
-```
-
-## API Reference
-
-### Constructor
-```typescript
-new DecimalCurrency(num: string | number | DecimalCurrency, precision?: number = 10)
 ```
 
 ### Arithmetic Methods
