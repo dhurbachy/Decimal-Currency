@@ -108,5 +108,36 @@ export class DecimalCurrency {
     }
 
     
+    format(
+        style: "EN" | "NP" = "EN",
+        useDevanagariDigits: boolean = false
+    ): string {
+        let [intPart, decimalPart] = this.value.split(".");
+
+        if (style === "EN") {
+            intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        if (style === "NP") {
+            const last3 = intPart.slice(-3);
+            const rest = intPart.slice(0, -3);
+            if (rest.length > 0) {
+                intPart =
+                    rest.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + last3;
+            }
+        }
+
+        let result = decimalPart ? `${intPart}.${decimalPart}` : intPart;
+
+        if (useDevanagariDigits) {
+            const map: Record<string, string> = {
+                "0": "०", "1": "१", "2": "२", "3": "३", "4": "४",
+                "5": "५", "6": "६", "7": "७", "8": "८", "9": "९"
+            };
+            result = result.replace(/\d/g, d => map[d]);
+        }
+
+        return result;
+    }
 
 }
