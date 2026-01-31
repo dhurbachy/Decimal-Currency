@@ -107,7 +107,7 @@ export class DecimalCurrency {
         return Number(this.value);
     }
 
-    
+
     format(
         style: "EN" | "NP" = "EN",
         useDevanagariDigits: boolean = false
@@ -139,5 +139,75 @@ export class DecimalCurrency {
 
         return result;
     }
+
+    toWords(
+        system: "EN" | "NP" = "EN"
+    ): string {
+        const [intStr, decStr] = this.value.split(".");
+        const num = BigInt(intStr);
+
+        if (num === BigInt(0) && !decStr) return "Zero";
+
+        const small = [
+            "Zero", "One", "Two", "Three", "Four",
+            "Five", "Six", "Seven", "Eight", "Nine",
+            "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen",
+            "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+        ];
+
+        const tens = [
+            "", "", "Twenty", "Thirty", "Forty",
+            "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
+        ];
+
+        const international = [
+            { value: BigInt("1000000000000000000"), name: "Quintillion" },
+            { value: BigInt("1000000000000000"), name: "Quadrillion" },
+            { value: BigInt("1000000000000"), name: "Trillion" },
+            { value: BigInt("1000000000"), name: "Billion" },
+            { value: BigInt("1000000"), name: "Million" },
+            { value: BigInt("1000"), name: "Thousand" }
+        ];
+
+        const indic = [
+            { value: BigInt("10000000000000000000"), name: "Maha Sankha" },
+            { value: BigInt("100000000000000000"), name: "Sankha" },
+            { value: BigInt("1000000000000000"), name: "Padma" },
+            { value: BigInt("10000000000000"), name: "Nil" },
+            { value: BigInt("100000000000"), name: "Kharab" },
+            { value: BigInt("1000000000"), name: "Arab" },
+            { value: BigInt("10000000"), name: "Crore" },
+            { value: BigInt("100000"), name: "Lakh" },
+            { value: BigInt("1000"), name: "Thousand" }
+        ];
+
+        const scales = system === "NP" ? indic : international;
+
+        const convertInt = (n: bigint): string => {
+            if (n < BigInt(20)) return small[Number(n)];
+            if (n < BigInt(100))
+                return tens[Number(n / BigInt(10))] + (n % BigInt(10) ? " " + small[Number(n % BigInt(10))] : "");
+            if (n < BigInt(1000))
+                return small[Number(n / BigInt(100))] + " Hundred" + (n % BigInt(100) ? " " + convertInt(n % BigInt(100)) : "");
+
+            for (const s of scales) {
+                if (n >= s.value) {
+                    return convertInt(n / s.value) + " " + s.name + (n % s.value ? " " + convertInt(n % s.value) : "");
+                }
+            }
+            return "";
+        };
+
+        let result = convertInt(num);
+
+        // 🔹 Decimal handling
+        if (decStr && BigInt(decStr) !== BigInt(0)) {
+            const decimalWords = decStr.split("").map(d => small[Number(d)]).join(" ");
+            result += " Point " + decimalWords;
+        }
+
+        return result.trim();
+    }
+
 
 }
