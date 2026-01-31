@@ -119,6 +119,45 @@ const highPrecision = new DecimalCurrency('1').divide('3', 20);
 console.log(highPrecision.toString()); // "0.33333333333333333333"
 ```
 
+### Formatting Numbers
+The format method allows you to display numbers with proper grouping and optional Devanagari digits:
+```javascript 
+const amt = new DecimalCurrency('1234567.89');
+
+// English style with commas
+console.log(amt.format()); // "1,234,567.89"
+console.log(amt.format("EN")); // "1,234,567.89"
+
+// Nepali style (lakh/crore grouping)
+console.log(amt.format("NP")); // "12,34,567.89"
+
+// Using Devanagari digits
+console.log(amt.format("EN", true)); // "१,२३४,५६७.८९"
+console.log(amt.format("NP", true)); // "१२,३४,५६७.८९"
+```
+
+### Converting Numbers to Words
+The toWords method converts a number into words in English or Nepali numbering systems:
+```javascript 
+const amt1 = new DecimalCurrency('1234567.89');
+const amt2 = new DecimalCurrency('1000000000');
+
+// English words
+console.log(amt1.toWords()); 
+// "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven Point Eight Nine"
+
+// Nepali/Indic words
+console.log(amt1.toWords("NP")); 
+// "Twelve Lakh Thirty Four Thousand Five Hundred Sixty Seven Point Eight Nine"
+
+// Very large numbers
+console.log(amt2.toWords("EN")); 
+// "One Billion"
+console.log(amt2.toWords("NP")); 
+// "Arab"
+
+```
+
 ### Arithmetic Methods
 - `add(n: Num, precision?: number): DecimalCurrency`
 - `subtract(n: Num, precision?: number): DecimalCurrency`
@@ -140,6 +179,12 @@ console.log(highPrecision.toString()); // "0.33333333333333333333"
 ### Conversion Methods
 - `toString(): string`
 - `toNumber(): number`
+- `format(style?: "EN" | "NP", useDevanagariDigits?: boolean): string`
+- `toWords(system?: "EN" | "NP"): string`
+
+
+
+
 
 ## Performance Considerations
 
